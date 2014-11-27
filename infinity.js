@@ -1,5 +1,5 @@
 //     (c) 2012 Airbnb, Inc.
-//     
+//
 //     infinity.js may be freely distributed under the terms of the BSD
 //     license. For all licensing information, details, and documentation:
 //     http://airbnb.github.com/infinity
@@ -83,8 +83,6 @@
 	this.more = !!options.more;
 	this.moreFn = options.more || null;
 
-    this.useElementScroll = options.useElementScroll === true;
-
     initBuffer(this);
 
     this.top = this.$el.offset().top;
@@ -94,7 +92,8 @@
     this.pages = [];
     this.startIndex = 0;
 
-    this.$scrollParent = this.useElementScroll ? $el : $window;
+    this.$scrollParent = options.scrollParent || $(window);
+    this.$scrollChild = options.scrollChild || this.$scrollParent;
 
     DOMEvent.attach(this);
   }
@@ -318,9 +317,8 @@
   function updateStartIndex(listView, prepended) {
     var index, length, pages, lastIndex, nextLastIndex,
         startIndex = listView.startIndex,
-        viewRef = listView.$scrollParent,
-        viewTop = viewRef.scrollTop() - listView.top,
-        viewHeight = viewRef.height(),
+        viewTop = listView.$scrollChild.scrollTop() - listView.top,
+        viewHeight = listView.$scrollParent.height(),
         viewBottom = viewTop + viewHeight,
         nextIndex = startIndexWithinRange(listView, viewTop, viewBottom);
 
@@ -663,7 +661,7 @@
 
       attach: function(listView) {
         if(!listView.eventIsBound) {
-          listView.$scrollParent.on('scroll', scrollHandler);
+          listView.$scrollChild.on('scroll', scrollHandler);
           listView.eventIsBound = true;
         }
 
@@ -691,7 +689,7 @@
       detach: function(listView) {
         var index, length;
         if(listView.eventIsBound) {
-          listView.$scrollParent.on('scroll', scrollHandler);
+          listView.$scrollChild.on('scroll', scrollHandler);
           listView.eventIsBound = false;
         }
 
