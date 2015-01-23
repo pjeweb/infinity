@@ -1084,4 +1084,5 @@
     return infinity;
   };
 
+  return infinity;
 }));
