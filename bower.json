@@ -38,10 +38,10 @@
     "test",
     "tests"
   ],
-  
-  moduleType: [
-    'amd',
-    'globals',
-    'node'
+
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
   ]
 }
