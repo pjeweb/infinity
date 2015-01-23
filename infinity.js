@@ -4,7 +4,20 @@
 //     license. For all licensing information, details, and documentation:
 //     http://airbnb.github.com/infinity
 
-!function(window, Math, $) {
+(function (factory) {
+  // Module systems magic dance.
+  // From: *somewhere* it's not entirely clear where to attribute this mixed module setup stuff to
+  if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
+    // CommonJS or Node: hard-coded dependency on "jquery"
+    factory(window, Math, require("jquery"));
+  } else if (typeof define === "function" && define["amd"]) {
+    // AMD anonymous module with hard-coded dependency on "jquery"
+    define(["jquery"], function ($) { factory(window, Math, $); });
+  } else {
+    // <script> tag: use the global `jQuery` object
+    factory(window, Math, jQuery);
+  }
+}(function(window, Math, $) {
   'use strict';
 
 
@@ -1071,4 +1084,4 @@
     return infinity;
   };
 
-}(window, Math, jQuery);
+}));
