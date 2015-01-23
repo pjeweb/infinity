@@ -80,7 +80,12 @@
   //
   // - `$el`: a jQuery element.
   // - `options`: an optional hash of options
-
+  //     - `lazy`: Boolean to enable calling the lazyFn
+  //     - `lazyFn`: A callback function called for a page that has had new items appended/prepended, whenever a scroll occurs, an item is appended or repartition is called.
+  //			The context and first argument is set to the page element.
+  //     - `$scrollParent`: The jQuery element providing a height for the visible elements. This determines the size of pages and should not be an element that grows as ListItems are added.
+  //            (Defaults to `window`)
+  //     - `$scrollChild`: The jQuery element to hook scroll events on to. (Defaults to `$scrollParent`)
   function ListView($el, options) {
     options = options || {};
 
@@ -107,6 +112,14 @@
 
     this.$scrollParent = options.scrollParent || $(window);
     this.$scrollChild = options.scrollChild || this.$scrollParent;
+
+    // Initialise callbacks
+    this.onPageMovingInDOM = undefined;
+    this.onPageMovedInDOM = undefined;
+    this.onPageAppendingToDOM = undefined;
+    this.onPageAppendedToDOM = undefined;
+    this.onPageRemovingFromDOM = undefined;
+    this.onPageRemovedFromDOM = undefined;
 
     DOMEvent.attach(this);
   }
@@ -308,11 +321,31 @@
       if(inserted && curr.onscreen) inOrder = false;
 
       if(!inOrder) {
+      	// Callback for page about to be moved in DOM
+        if (listView.onPageMovingInDOM) {
+          listView.onPageMovingInDOM(curr);
+        }
+
         curr.stash(listView.$shadow);
         curr.appendTo(listView.$el);
+
+        // Callback for page just moved in DOM
+        if (listView.onPageMovedInDOM) {
+          listView.onPageMovedInDOM(curr);
+        }
       } else if(!curr.onscreen) {
-        inserted = true;
+        // Callback for page about to be put in DOM
+        if (listView.onPageAppendingToDOM) {
+          listView.onPageAppendingToDOM(curr);
+        }
+
+		inserted = true;
         curr.appendTo(listView.$el);
+
+        // Callback for page now in DOM
+        if (listView.onPageAppendedToDOM) {
+          listView.onPageAppendedToDOM(curr);
+        }
       }
     }
   }
@@ -347,8 +380,19 @@
 
     // sweep any invalid old pages
     for(index = startIndex, length = lastIndex; index < length; index++) {
-      if(index < nextIndex || index >= nextLastIndex)
+      if(index < nextIndex || index >= nextLastIndex) {
+      	// Callback for page about to be removed from DOM
+      	if (listView.onPageRemovingFromDOM) {
+          listView.onPageRemovingFromDOM(pages[index]);
+        }
+
         pages[index].stash(listView.$shadow);
+
+		// Callback for page removed from DOM
+      	if (listView.onPageRemovedFromDOM) {
+          listView.onPageRemovedFromDOM(pages[index]);
+        }
+      }
     }
 
     listView.startIndex = nextIndex;
