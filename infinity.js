@@ -9,15 +9,16 @@
   // From: *somewhere* it's not entirely clear where to attribute this mixed module setup stuff to
   if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
     // CommonJS or Node: hard-coded dependency on "jquery"
-    factory(window, Math, require("jquery"));
+    factory(window, Math, require("jquery"), exports);
   } else if (typeof define === "function" && define["amd"]) {
     // AMD anonymous module with hard-coded dependency on "jquery"
-    define(["jquery"], function ($) { factory(window, Math, $); });
+    define(["jquery", "exports"], function ($, exports) { factory(window, Math, $, exports); });
   } else {
     // <script> tag: use the global `jQuery` object
-    factory(window, Math, jQuery);
+    var oldInfinity = window['infinity'];
+    factory(window, Math, window['jQuery'], window['infinity'] = {}, oldInfinity);
   }
-}(function(window, Math, $) {
+}(function(window, Math, $, exports, oldInfinity) {
   'use strict';
 
 
@@ -53,8 +54,7 @@
   var $window = $(window);
 
   // Packaging:
-  var oldInfinity = window.infinity,
-      infinity = window.infinity = {},
+  var infinity = exports,
       config = infinity.config = {};
 
   // Constants:
@@ -1084,5 +1084,4 @@
     return infinity;
   };
 
-  return infinity;
 }));
