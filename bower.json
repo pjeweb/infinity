@@ -1,42 +1,40 @@
 {
   "name": "infinity",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A UITableView for the web.",
   "license": "BSD",
 
   "keywords": ["infinite", "scroll", "infinity", "UITableView", "ListView"],
-    
+
   "homepage": "http://airbnb.github.com/infinity",
-  
+
   "authors": [
-    {"name": "Matt Baker", "homepage": "http://github.com/reissbaker"}
+    {"name": "Matt Baker", "homepage": "http://github.com/reissbaker"},
+    {"name": "pjeweb", "homepage": "http://github.com/pjeweb"}
   ],
-  
+
   "repository": {
     "type": "git",
     "url": "http://github.com/airbnb/infinity.git"
   },
 
   "dependencies": {
-    "jquery": "1.9.1"
+    "jquery": "1.11.x"
   },
 
   "devDependencies": {
     "uglify-js": "1.3.3",
     "docco": "0.3.0",
     "mocha": "1.3.2",
-    "expect.js": "0.1.2",
-    "coffee-script": "1.3.3"
+    "expect.js": "0.1.2"
   },
-  
+
   "main": "build/infinity.min.js",
 
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "test"
   ],
 
   "moduleType": [
