@@ -548,7 +548,6 @@
 	// - `listView`: the ListView whose startIndex you're calculating.
 	// - `top`: the top of the range.
 	// - `bottom`: the bottom of the range.
-ret
 	function startIndexWithinRange(listView, top, bottom) {
 		var index = indexWithinRange(listView, top, bottom);
 		index = Math.max(index - NUM_BUFFER_PAGES, 0);
